@@ -3,10 +3,38 @@ Rails.application.routes.draw do
   # resources :users, only: [:index, :show, :update, :create, :destroy]
   resources :users, except: [:new, :edit] do 
     resources :artworks, only: [:index]
+    resources :comments, only: [:index]
+    resources :likes, only:[:index]
+    member do
+      get :favorites
+    end
+    resources :collections, only: [:index]
+    resources :collection_contents, only: [:create]
   end
-  resources :artworks, only: [:show, :update, :create, :destroy]
-  resources :artwork_shares, only: [:create, :destroy]
+  resources :artworks, only: [:show, :update, :create, :destroy] do
+    resources :comments, only: [:index]
+    resources :likes, only: [:index]
+    member do
+      patch :favorite
+      patch :unfavorite
+    end
+  end
+  resources :artwork_shares, only: [:create, :destroy] do
+    member do
+      patch :favorite
+      patch :unfavorite
+    end
+  end
+  resources :comments, only: [:create, :destroy] do 
+    resources :likes, only: [:index]
+  end
 
+  resources :likes, only: [:create, :destroy]
+
+  resources :collections, only: [:create, :destroy, :show, :update] do 
+    resource :collection_contents, only: [:index]
+  end
+  resources :collection_contents, only: [:destroy]
   # get '/users', to: 'users#index', as: 'users'
   # get '/users/:id', to: 'users#show', as: 'user'
   # get '/users/new', to: 'users#new', as: 'new_user'

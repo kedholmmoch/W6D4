@@ -41,6 +41,24 @@ class ArtworksController < ApplicationController
     end
   end
 
+  def favorite
+    artwork = Artwork.find(params[:id])
+    if artwork.update(favorite: true)
+      render json: artwork
+    else
+      render json: artwork.errors.full_messages, status: 418
+    end
+  end
+
+  def unfavorite
+    artwork = Artwork.find(params[:id])
+    if artwork.update(favorite: false)
+      render json: artwork
+    else
+      render json: artwork.errors.full_messages, status: 418
+    end
+  end
+
   private 
 
   def artwork_params

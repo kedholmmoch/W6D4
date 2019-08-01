@@ -5,11 +5,11 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-kevin = User.find_by(username: 'kevin')
-aaron = User.find_by(username: 'aaron')
 
 ActiveRecord::Base.transaction do
   # Users
+  kevin = User.create!(username: 'kevin')
+  aaron = User.create!(username: 'aaron')
   mike = User.create!(username: 'mike')
   sam = User.create!(username: 'sam')
 

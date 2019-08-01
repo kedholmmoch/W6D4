@@ -1,6 +1,11 @@
+require 'byebug'
 class UsersController < ApplicationController
   def index
-    users = User.all
+    if params[:username]
+      users = User.where("username LIKE '%#{params[:username]}%'")
+    else
+      users = User.all
+    end
     render json: users
   end
 
@@ -34,6 +39,14 @@ class UsersController < ApplicationController
     else
       render json: user.errors.full_messages, status: 418
     end
+  end
+
+  def favorites
+    results = []
+    results += Artwork.where(favorite: true)
+    results += ArtworkShare.where(favorite: true).map(&:artwork)
+
+    render json: results
   end
 
   private 
